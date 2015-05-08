@@ -6,7 +6,9 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 /**
  * Created by emy on 5/7/15.
  */
-interface AccountRepo extends MongoRepository<UserAccounts, String> {
+public interface AccountRepo extends MongoRepository<UserAccounts, String> {
 
+    public UserAccounts save(UserAccounts userAccounts);
+    public UserAccounts findById(String Id);
 
 }

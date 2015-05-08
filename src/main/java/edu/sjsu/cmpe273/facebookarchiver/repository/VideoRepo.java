@@ -6,5 +6,5 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 /**
  * Created by emy on 5/7/15.
  */
-interface VideoRepo extends MongoRepository<UserVideos, String> {
+public interface VideoRepo extends MongoRepository<UserVideos, String> {
 }

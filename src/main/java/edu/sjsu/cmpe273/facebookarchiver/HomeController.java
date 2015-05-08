@@ -5,12 +5,15 @@ import com.restfb.DefaultFacebookClient;
 import com.restfb.FacebookClient;
 import com.restfb.Version;
 import com.restfb.types.User;
+import edu.sjsu.cmpe273.facebookarchiver.services.UserAccountService;
 import org.scribe.builder.ServiceBuilder;
 import org.scribe.builder.api.FacebookApi;
 import org.scribe.exceptions.OAuthException;
 import org.scribe.model.Token;
 import org.scribe.model.Verifier;
 import org.scribe.oauth.OAuthService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -36,6 +39,10 @@ public class HomeController {
     private OAuthService oAuthService;
     private FacebookClient facebookClient;
 
+    @Autowired
+    UserAccountService userAccountService;
+
+
     public HomeController() {
          this.oAuthService = buildOAuthService(client_id, app_secret);
     }
@@ -46,6 +53,7 @@ public class HomeController {
                 .apiSecret(app_secret)
                 .callback(url+"/auth/facebook/callback") //redirects the callback and must match the url in facebook settings.
                 .provider(FacebookApi.class)
+                .scope("email")
                 .build();
     }
       @RequestMapping(value="/")
@@ -84,8 +92,10 @@ public class HomeController {
 
     @RequestMapping(value="/{user-id}/attending", method = RequestMethod.GET)
     @ResponseStatus(HttpStatus.OK)
-    public @ResponseBody void getName(@PathVariable("user-id")String userId) {
+    public @ResponseBody void getProfile(@PathVariable("user-id")String userId) {
         User me = facebookClient.fetchObject("me", User.class);
+        userAccountService.create(me);
+        return;
     }
 
 }

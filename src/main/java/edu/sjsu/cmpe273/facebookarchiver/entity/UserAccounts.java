@@ -19,15 +19,8 @@ public class UserAccounts {
 
     public UserAccounts() {}
 
-    public UserAccounts(String id, String email, String name, String gender){
-        this.id = id;
-        this.email = email;
-        this.name = name;
-        this.gender = gender;
-    }
-
     public void setId(String Id) {
-        this.id = id;
+        this.id = Id;
     }
     public void setName(String name){
         this.name = name;
@@ -43,7 +36,7 @@ public class UserAccounts {
         return this.id;
     }
     public String getName(){
-        return this.email;
+        return this.name;
     }
     public String getEmail(){
         return this.email;

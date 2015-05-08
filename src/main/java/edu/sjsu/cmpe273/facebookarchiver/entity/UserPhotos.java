@@ -13,13 +13,18 @@ public class UserPhotos {
     private String photoId;
     @Field
     private String createdAt;
+    @Field
+    private String user_Id;
 
     public UserPhotos() {}
 
-    public void setId(String photoId){
+    public void setPhotoId(String photoId){
         this.photoId=photoId;
     }
     public void setCreatedAt(String createdAt){
         this.createdAt=createdAt;
+    }
+    public void setUser_Id(String user_Id){
+        this.user_Id=user_Id;
     }
 }
