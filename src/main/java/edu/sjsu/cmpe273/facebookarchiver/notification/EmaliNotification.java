@@ -12,8 +12,8 @@ import com.amazonaws.services.sns.model.CreateTopicResult;
 import com.amazonaws.services.sns.model.PublishRequest;
 
 public class EmaliNotification {
-    private String secretKey="EVYOZVMJAFy7Zp2BMaogvAxXXo5G1JV3vS3UBId9";
-    private String accessKey="AKIAJ2FPKKJXHFMTI72Q";
+    private String secretKey="";
+    private String accessKey="";
 /*
     public static void main(String[] args) {
 
