@@ -5,7 +5,10 @@ import com.restfb.DefaultFacebookClient;
 import com.restfb.FacebookClient;
 import com.restfb.Version;
 import com.restfb.types.User;
+import edu.sjsu.cmpe273.facebookarchiver.entity.UserAccounts;
+import edu.sjsu.cmpe273.facebookarchiver.entity.UserPhotos;
 import edu.sjsu.cmpe273.facebookarchiver.services.UserAccountService;
+import edu.sjsu.cmpe273.facebookarchiver.services.UserPhotoService;
 import org.scribe.builder.ServiceBuilder;
 import org.scribe.builder.api.FacebookApi;
 import org.scribe.exceptions.OAuthException;
@@ -22,6 +25,7 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.UUID;
 
 /**
@@ -41,6 +45,8 @@ public class HomeController {
 
     @Autowired
     UserAccountService userAccountService;
+    @Autowired
+    UserPhotoService userPhotoService;
 
 
     public HomeController() {
@@ -54,6 +60,7 @@ public class HomeController {
                 .callback(url+"/auth/facebook/callback") //redirects the callback and must match the url in facebook settings.
                 .provider(FacebookApi.class)
                 .scope("email")
+                .scope("user_photos")
                 .build();
     }
       @RequestMapping(value="/")
@@ -82,6 +89,8 @@ public class HomeController {
         //Exchanges the access token
         Token accessToken = getAccessToken(code);
         this.facebookClient = new DefaultFacebookClient(accessToken.getToken(), Version.VERSION_2_2);
+        userAccountService.create(facebookClient);
+        userPhotoService.create(facebookClient);
         return "logged"; //successfully logged in.
     }
 
@@ -90,12 +99,32 @@ public class HomeController {
         return oAuthService.getAccessToken(Token.empty(), verify);//Token.Empty() method in scribe and handles OAuthservice for both OAuth1 and 2.
     }
 
-    @RequestMapping(value="/{user-id}/attending", method = RequestMethod.GET)
+    //@RequestMapping(value="/{user-id}/attending", method = RequestMethod.GET)
+    //@RequestMapping(value = "/userAccounts", method=RequestMethod.GET)
+    //@ResponseStatus(HttpStatus.OK)
+   // public @ResponseBody
+    //UserAccounts getProfile(/*@PathVariable("user-id")String userId*/) {
+      //  User me = facebookClient.fetchObject("me", User.class);
+        //return userAccountService.create(me);
+        //return;
+   // }
+    //@RequestMapping(value="/{user-id}/photo", method = RequestMethod.GET)
+    @RequestMapping(value="/userPhoto", method=RequestMethod.GET)
     @ResponseStatus(HttpStatus.OK)
-    public @ResponseBody void getProfile(@PathVariable("user-id")String userId) {
-        User me = facebookClient.fetchObject("me", User.class);
-        userAccountService.create(me);
+    public @ResponseBody
+    void getPhoto(/*@PathVariable("user-id")String userId*/)
+    {
+       userPhotoService.create(facebookClient);
         return;
     }
+
+    //List all photos
+    @RequestMapping(value="/userAccounts/{id}/userPhotos", method=RequestMethod.GET)
+    @ResponseBody
+    public ArrayList<UserPhotos> getAllPhotos(@PathVariable("id")String Id){
+        return userPhotoService.listAllPhotos(Id);
+    }
+
+
 
 }

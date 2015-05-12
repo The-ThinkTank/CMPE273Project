@@ -1,5 +1,6 @@
 package edu.sjsu.cmpe273.facebookarchiver.services;
 
+import com.restfb.FacebookClient;
 import com.restfb.types.User;
 import edu.sjsu.cmpe273.facebookarchiver.entity.UserAccounts;
 import edu.sjsu.cmpe273.facebookarchiver.repository.AccountRepo;
@@ -16,7 +17,8 @@ public class UserServiceImple implements UserAccountService{
     AccountRepo accountRepo;
 
     @Override
-    public UserAccounts create(User me){
+    public UserAccounts create(FacebookClient facebookClient){
+        User me = facebookClient.fetchObject("me", User.class);
         UserAccounts userAccounts = new UserAccounts();
         userAccounts.setEmail(me.getEmail());
         userAccounts.setGender(me.getGender());

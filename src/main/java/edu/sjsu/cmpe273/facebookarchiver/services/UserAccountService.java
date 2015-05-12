@@ -1,6 +1,7 @@
 package edu.sjsu.cmpe273.facebookarchiver.services;
 
 
+import com.restfb.FacebookClient;
 import com.restfb.types.User;
 import edu.sjsu.cmpe273.facebookarchiver.entity.UserAccounts;
 
@@ -9,6 +10,6 @@ import edu.sjsu.cmpe273.facebookarchiver.entity.UserAccounts;
  */
 public interface UserAccountService {
 
-   UserAccounts create(User me);
+   UserAccounts create(FacebookClient facebookClient);
    UserAccounts getUser(String id);
 }
