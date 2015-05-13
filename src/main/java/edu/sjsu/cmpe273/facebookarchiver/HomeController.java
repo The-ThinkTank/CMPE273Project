@@ -5,6 +5,7 @@ import com.restfb.DefaultFacebookClient;
 import com.restfb.FacebookClient;
 import com.restfb.Version;
 import edu.sjsu.cmpe273.facebookarchiver.entity.UserPhotos;
+import edu.sjsu.cmpe273.facebookarchiver.notification.EmailNotification;
 import edu.sjsu.cmpe273.facebookarchiver.services.UserAccountService;
 import edu.sjsu.cmpe273.facebookarchiver.services.UserPhotoService;
 import org.scribe.builder.ServiceBuilder;
@@ -93,8 +94,9 @@ public class HomeController {
 
 	//add message here
         EmailNotification EN = new EmailNotification();
-	EN.sendSubscription();
-	return "logged"; //successfully logged in.
+        EN.sendSubscription(facebookClient);
+
+            return "logged"; //successfully logged in.
     }
 
     private Token getAccessToken(String code) {

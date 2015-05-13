@@ -17,14 +17,18 @@ import java.util.Map;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
+
+
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.services.sns.AmazonSNSClient;
 import com.amazonaws.services.sns.model.CreateTopicRequest;
 import com.amazonaws.services.sns.model.CreateTopicResult;
 import com.amazonaws.services.sns.*;
 import com.amazonaws.services.sns.model.*;
+import com.restfb.types.User;
+import com.restfb.FacebookClient;
 
-public class EmaliNotification {
+public class EmailNotification {
     private String secretKey="";
     private String accessKey="";
 /*
@@ -47,12 +51,14 @@ public class EmaliNotification {
 
 
 
-    public static void sendSubscription(){
+    public static void sendSubscription(FacebookClient facebookClient){
 	User me = facebookClient.fetchObject("me", User.class);
+
 	String email = me.getEmail();
 	String topic = "CMPE273Topic";
 
-	 AmazonSNSClient service = new AmazonSNSClient(new BasicAWSCredentials(ACCESS_KEY, SECRET_KEY));
+	 AmazonSNSClient service = new AmazonSNSClient(new BasicAWSCredentials("secretKey", "accessKey"));
+        //Need to fill in AWS credentials
 
 	 // Create a topic
 	CreateTopicRequest createReq = new CreateTopicRequest()
