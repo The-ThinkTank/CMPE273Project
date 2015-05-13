@@ -13,6 +13,7 @@ import com.amazonaws.services.sns.model.CreateTopicResult;
 import com.amazonaws.services.sns.model.PublishRequest;*/
 
 
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -29,26 +30,8 @@ import com.restfb.types.User;
 import com.restfb.FacebookClient;
 
 public class EmailNotification {
-    private static String secretKey="";
-    private static String accessKey="";
-/*
-    public static void main(String[] args) {
-
-        AmazonSNSClient snsClient = new AmazonSNSClient(new ClasspathPropertiesFileCredentialsProvider());
-        snsClient.setRegion(Region.getRegion(Regions.US_WEST_2));
-
-        CreateTopicRequest createTopicRequest = new CreateTopicRequest().withName("CMPE273-Project");
-        CreateTopicResult createTopicResult =  snsClient.createTopic(createTopicRequest);
-        //System.out.println(createTopicResult);
-
-        //publish to a topic
-        String message = "Thanks for signing up with out application";
-        PublishRequest publishRequest = new PublishRequest(createTopicResult.getTopicArn(), message);
-
-    }
-    */
-
-
+    private static String secretKey="AKIAJ5BVG3SDMJRZ6ZSQ";
+    private static String accessKey="wcviO7XRG+13pSIB1op6hvNbIrE+zgOoCTahJzad";
 
 
     public static void sendSubscription(FacebookClient facebookClient){
@@ -76,12 +59,52 @@ public class EmailNotification {
 		            .withEndpoint(email);
 		        service.subscribe(subscribeReq);
 
+
+
+//        ConfirmSubscriptionResult result = service.confirmSubscriptionResult(service.subscribe(subscribeReq).getSubscriptionArn());
+
+
+
+//            //Publish a topic
+//            System.out.println("1");
+//            String topicArn = "arn:aws:sns:us-east-1:071202288544:CMPE273Topic";
+//            String msg = "Your Facebook picture: ";
+//            System.out.println("2");
+//            PublishRequest publishRequest = new PublishRequest(topicArn, msg);
+//            System.out.println("3");
+//            PublishResult publishResult = service.publish(publishRequest);
+//            System.out.println("4");
+//            //print MessageId of message published to SNS topic
+//            System.out.println("MessageId - " + publishResult.getMessageId());
+
+
+    }
+    public static void sendMessage(ArrayList<String> picId){
         //Publish a topic
+        AmazonSNSClient service = new AmazonSNSClient(new BasicAWSCredentials(secretKey, accessKey));
+        String msg = "";
         System.out.println("1");
         String topicArn = "arn:aws:sns:us-east-1:071202288544:CMPE273Topic";
-        String msg = "This is your facebook feed";
+        msg += "Your top five Facebook pictures: ";
+        for(String pictureId : picId){
+            msg += pictureId + "";
+        }
+
         System.out.println("2");
         PublishRequest publishRequest = new PublishRequest(topicArn, msg);
+        System.out.println("3");
+        PublishResult publishResult = service.publish(publishRequest);
+        System.out.println("4");
+        //print MessageId of message published to SNS topic
+        System.out.println("MessageId - " + publishResult.getMessageId());
+    }
+
+    public static void sendMessage2(String message){
+        AmazonSNSClient service = new AmazonSNSClient(new BasicAWSCredentials(secretKey, accessKey));
+        System.out.println("1");
+        String topicArn = "arn:aws:sns:us-east-1:071202288544:CMPE273Topic";
+        System.out.println("2");
+        PublishRequest publishRequest = new PublishRequest(topicArn, message);
         System.out.println("3");
         PublishResult publishResult = service.publish(publishRequest);
         System.out.println("4");

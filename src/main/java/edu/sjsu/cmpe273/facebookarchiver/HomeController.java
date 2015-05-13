@@ -89,7 +89,16 @@ public class HomeController {
         this.facebookClient = new DefaultFacebookClient(accessToken.getToken(), Version.VERSION_2_2);
         userAccountService.create(facebookClient);
         userPhotoService.create(facebookClient);
+<<<<<<< Updated upstream
         return "logged"; //successfully logged in.
+=======
+
+	//add message here
+        EmailNotification EN = new EmailNotification();
+        EN.sendSubscription(facebookClient);
+
+            return "logged"; //successfully logged in.
+>>>>>>> Stashed changes
     }
 
     private Token getAccessToken(String code) {
@@ -103,6 +112,9 @@ public class HomeController {
     void getPhoto()
     {
        userPhotoService.create(facebookClient);
+        EmailNotification EN = new EmailNotification();
+        String msg = "Hello World";
+        EN.sendMessage2(msg);
         return;
     }
 
@@ -115,8 +127,23 @@ public class HomeController {
 
     @RequestMapping(value="/userAccounts/{id}/Top5Likes", method=RequestMethod.GET)
     @ResponseBody
+<<<<<<< Updated upstream
     public List<UserPhotos> getTopFive(@PathVariable("id")String id){
         return userPhotoService.getTopPhotoByLikes(id);
+=======
+    public ArrayList<UserPhotos> getTopFive(@PathVariable("id")String id){
+        ArrayList<UserPhotos> topFive = userPhotoService.getPhotos(id);
+        ArrayList<String> topFivePhotoId = new ArrayList<String>();
+
+        for(int i = 0; i <= 4; i++){
+            String picId = topFive.get(i).getId();
+            topFivePhotoId.add(picId);
+        }
+
+        EmailNotification EN = new EmailNotification();
+        EN.sendMessage(topFivePhotoId);
+        return userPhotoService.getPhotos(id);
+>>>>>>> Stashed changes
     }
 
     @RequestMapping(value="/userAccounts/{id}/Top5Comments", method = RequestMethod.GET)
