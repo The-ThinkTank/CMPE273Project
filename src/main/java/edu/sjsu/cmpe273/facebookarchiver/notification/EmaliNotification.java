@@ -3,17 +3,9 @@ package edu.sjsu.cmpe273.facebookarchiver.notification;
 /**
  * Created by emy on 5/10/15.
  */
-import com.amazonaws.regions.Regions;
-import com.amazonaws.services.sns.AmazonSNSClient;
-import com.amazonaws.auth.ClasspathPropertiesFileCredentialsProvider;
-import com.amazonaws.regions.Region;
-import com.amazonaws.services.sns.model.CreateTopicRequest;
-import com.amazonaws.services.sns.model.CreateTopicResult;
-import com.amazonaws.services.sns.model.PublishRequest;
-
 public class EmaliNotification {
-    private String secretKey="";
-    private String accessKey="";
+    //private String secretKey="";
+    //private String accessKey="";
 /*
     public static void main(String[] args) {
 

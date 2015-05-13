@@ -32,4 +32,5 @@ public class UserServiceImple implements UserAccountService{
         UserAccounts userAccounts = accountRepo.findById(id);
         return userAccounts;
     }
+
 }

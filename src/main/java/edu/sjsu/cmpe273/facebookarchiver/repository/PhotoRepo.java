@@ -4,7 +4,6 @@ import edu.sjsu.cmpe273.facebookarchiver.entity.UserPhotos;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by emy on 5/7/15.

@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 
@@ -32,48 +33,93 @@ public class UserPhotoServiceImpl implements UserPhotoService {
     @Override
     public UserPhotos create(FacebookClient facebookClient){
         UserPhotos userPhotos = new UserPhotos();
-        Comments getcomments = new Comments();
         User me = facebookClient.fetchObject("me", User.class);
-        List<String> tempLikes = new ArrayList<String>();
-        List<Comments> commentList = new ArrayList<Comments>();
 
-        int countOfLikes =0;//tracks number of likes.
+        int countOfLikes;//tracks number of likes.
 
         Connection<Photo> connection = facebookClient.fetchConnection("me/photos", Photo.class,
-                Parameter.with("fields", "id,created_time,source,comments,likes")/*, Parameter.with("limit",15)*/);
+               Parameter.with("fields", "id,created_time,source,comments,likes"),Parameter.with("limit",200));
           userPhotos.setUserId(me.getId());
         for(Photo photos: connection.getData()) {
-            userPhotos.setPhotoId(photos.getId());
-            userPhotos.setCreatedAt(String.valueOf(photos.getCreatedTime()));
-            userPhotos.setSource(photos.getSource());
-            userPhotos.setLink(photos.getLink());
+                List<String> tempLikes = new ArrayList<String>();
+                List<Comments> commentList = new ArrayList<Comments>();
+                userPhotos.setPhotoId(photos.getId());
+                userPhotos.setCreatedAt(String.valueOf(photos.getCreatedTime()));
+                userPhotos.setSource(photos.getSource());
+                List<NamedFacebookType> likes = photos.getLikes();
+                countOfLikes = 0;  //making sure likes dont keep increasing for each photo
+                for (NamedFacebookType like : likes) {
+                    String name = like.getName();
+                    tempLikes.add(name);
+                    ++countOfLikes;
+                }
+                userPhotos.setLikes(tempLikes);
+                userPhotos.setNumberOfLikes(countOfLikes); //stores number of likes.
 
-            List<NamedFacebookType> likes = photos.getLikes();
+              //comments code
+                List<Comment> comment = photos.getComments();
+            int j=0;
+                for (Comment notes : comment) {
+                    Comments getcomments = new Comments();
+                    getcomments.setId(notes.getId());
+                    getcomments.setName(notes.getFrom().getName());
+                    getcomments.setMessage(notes.getMessage());
+                    getcomments.setLike_count(notes.getLikeCount());
+                    userPhotos.setNumberOfComments(comment.size());
+                    commentList.add(getcomments);
+                    j++;
+                }
 
-            for(NamedFacebookType like: likes){
-                String name = like.getName();
-                tempLikes.add(name);
-                countOfLikes++;
+                userPhotos.setComments(commentList);
+                for(int i=0; i<userPhotos.getComments().size();i++) {
+                    System.out.println(userPhotos.getComments().get(i).getMessage());
+                }
+                photoRepo.save(userPhotos);
             }
-            userPhotos.setLikes(tempLikes);
-            userPhotos.setNumberOfLikes(countOfLikes); //stores number of likes.
-            List<Comment> comment = photos.getComments();
-            for(Comment notes:comment){
-                getcomments.setId(notes.getId());
-                getcomments.setName(notes.getFrom().getName());
-                getcomments.setMessage(notes.getMessage());
-                getcomments.setLike_count(notes.getLikeCount());
-                commentList.add(getcomments);
-              //  userPhotos.setComments(commentList);
-            }
-            userPhotos.setComments(commentList);
-            photoRepo.save(userPhotos);
-        }
+
         return userPhotos;
     }
 
     public ArrayList<UserPhotos> listAllPhotos(String Id){
         ArrayList<UserPhotos> list = photoRepo.findByUserId(Id);
         return list;
+    }
+
+    @Override
+    public ArrayList<UserPhotos> getPhotos(String id){
+        ArrayList<UserPhotos> userPhotosArrayList = photoRepo.findByUserId(id);
+
+        Collections.sort(userPhotosArrayList, UserPhotos.UserPhotosComparator);
+        ArrayList<UserPhotos> userPhotoses = new ArrayList<UserPhotos>();
+        int i=0;
+        for(UserPhotos photos: userPhotosArrayList){
+            userPhotoses.add(userPhotosArrayList.get(i));
+            i++;
+            if(i==5)
+            {
+                break;
+            }
+        }
+        return userPhotoses;
+
+    }
+
+    @Override
+    public List<UserPhotos> getComments(String id){
+        ArrayList<UserPhotos> userPhotosArrayList = photoRepo.findByUserId(id);
+
+        List<UserPhotos> userPhotosList = new ArrayList<UserPhotos>();
+
+        Collections.sort(userPhotosArrayList, UserPhotos.userCommentsComparator);
+
+        int i=0;
+        for(UserPhotos userPhotos: userPhotosArrayList){
+            userPhotosList.add(userPhotosArrayList.get(i));
+            i++;
+            if(i==5){
+                break;
+            }
+        }
+        return userPhotosList;
     }
 }

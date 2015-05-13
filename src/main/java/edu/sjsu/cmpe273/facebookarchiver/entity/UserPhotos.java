@@ -2,10 +2,8 @@ package edu.sjsu.cmpe273.facebookarchiver.entity;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.data.mongodb.core.mapping.Field;
 
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by emy on 4/25/15.
@@ -22,12 +20,14 @@ public class UserPhotos {
     private String userId;
     private List<String> likes;
     private String source;
-    private String link;
-    private List<Comments> comments;
+    private List<Comments> comments=new ArrayList<Comments>();
     private int numberOfLikes;
+    private int numberOfComments;
 
 
-    public UserPhotos() {}
+    public UserPhotos(){
+
+    }
 
     public void setPhotoId(String Id){
         this.Id=Id;
@@ -44,13 +44,8 @@ public class UserPhotos {
     public void setNumberOfLikes(int numberOfLikes){
         this.numberOfLikes=numberOfLikes;
     }
-    public void setLink(String link){
-        this.link=link;
-    }
     public String getSource(){return this.source;}
-    public String getLink(){
-        return this.link;
-    }
+
 
     public void setLikes(List<String> likes){
         this.likes=likes;
@@ -58,6 +53,7 @@ public class UserPhotos {
     public void setComments(List<Comments> comments){
         this.comments=comments;
     }
+
     public List<String> getLikes(){return likes;}
 
     public List<Comments> getComments(){return comments;}
@@ -71,4 +67,28 @@ public class UserPhotos {
     public String getCreatedAt(){
         return createdAt;
     }
+    public void setNumberOfComments(int numberOfComments){
+        this.numberOfComments=numberOfComments;
+    }
+    public int getNumberOfComments(){
+        return numberOfComments;
+    }
+
+  public static Comparator<UserPhotos> UserPhotosComparator = new Comparator<UserPhotos>() {
+      @Override
+      public int compare(UserPhotos o1, UserPhotos o2) {
+          int result = o1.getNumberOfLikes();
+          int result2 = o2.getNumberOfLikes();
+          return result2-result;
+      }
+  };
+
+    public static Comparator<UserPhotos> userCommentsComparator = new Comparator<UserPhotos>() {
+        @Override
+        public int compare(UserPhotos o1, UserPhotos o2) {
+            int comment1 = o1.getNumberOfComments();
+            int comment2 = o2.getNumberOfComments();
+            return comment2-comment1;
+        }
+    };
 }

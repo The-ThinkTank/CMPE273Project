@@ -4,8 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.restfb.DefaultFacebookClient;
 import com.restfb.FacebookClient;
 import com.restfb.Version;
-import com.restfb.types.User;
-import edu.sjsu.cmpe273.facebookarchiver.entity.UserAccounts;
 import edu.sjsu.cmpe273.facebookarchiver.entity.UserPhotos;
 import edu.sjsu.cmpe273.facebookarchiver.services.UserAccountService;
 import edu.sjsu.cmpe273.facebookarchiver.services.UserPhotoService;
@@ -16,16 +14,15 @@ import org.scribe.model.Token;
 import org.scribe.model.Verifier;
 import org.scribe.oauth.OAuthService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.view.RedirectView;
 
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -99,16 +96,6 @@ public class HomeController {
         return oAuthService.getAccessToken(Token.empty(), verify);//Token.Empty() method in scribe and handles OAuthservice for both OAuth1 and 2.
     }
 
-    //@RequestMapping(value="/{user-id}/attending", method = RequestMethod.GET)
-    //@RequestMapping(value = "/userAccounts", method=RequestMethod.GET)
-    //@ResponseStatus(HttpStatus.OK)
-   // public @ResponseBody
-    //UserAccounts getProfile(/*@PathVariable("user-id")String userId*/) {
-      //  User me = facebookClient.fetchObject("me", User.class);
-        //return userAccountService.create(me);
-        //return;
-   // }
-    //@RequestMapping(value="/{user-id}/photo", method = RequestMethod.GET)
     @RequestMapping(value="/userPhoto", method=RequestMethod.GET)
     @ResponseStatus(HttpStatus.OK)
     public @ResponseBody
@@ -123,6 +110,18 @@ public class HomeController {
     @ResponseBody
     public ArrayList<UserPhotos> getAllPhotos(@PathVariable("id")String Id){
         return userPhotoService.listAllPhotos(Id);
+    }
+
+    @RequestMapping(value="/userAccounts/{id}/Top5Likes", method=RequestMethod.GET)
+    @ResponseBody
+    public ArrayList<UserPhotos> getTopFive(@PathVariable("id")String id){
+        return userPhotoService.getPhotos(id);
+    }
+
+    @RequestMapping(value="/userAccounts/{id}/Top5Comments", method = RequestMethod.GET)
+    @ResponseBody
+    public List<UserPhotos> getFiveTopComments(@PathVariable("id")String id){
+        return userPhotoService.getComments(id);
     }
 
 

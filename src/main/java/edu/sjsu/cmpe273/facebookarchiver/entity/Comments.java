@@ -9,6 +9,7 @@ public class Comments {
     private String message;
     private String name;
     private long like_count;
+    private int numberOfComments;
 
     public void setId(String Id){
         this.Id=Id;
@@ -22,6 +23,9 @@ public class Comments {
     public void setLike_count(long like_count){
         this.like_count=like_count;
     }
+    public void setNumberOfComments(int numberOfComments){
+        this.numberOfComments=numberOfComments;
+    }
     public String getId(){
         return Id;
     }
@@ -34,4 +38,9 @@ public class Comments {
     public long getLike_count(){
         return like_count;
     }
+
+    public int getNumberOfComments(){
+        return this.numberOfComments;
+    }
+
 }

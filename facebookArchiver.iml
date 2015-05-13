@@ -70,5 +70,9 @@
     <orderEntry type="library" exported="" name="Gradle: joda-time:joda-time:2.7" level="project" />
     <orderEntry type="library" exported="" name="Gradle: org.apache.httpcomponents:httpcore:4.3" level="project" />
     <orderEntry type="library" exported="" name="Gradle: commons-codec:commons-codec:1.6" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: org.hamcrest:hamcrest-all:1.1" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: org.objenesis:objenesis:1.2" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: cglib:cglib-nodep:2.2" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: com.googlecode.lambdaj:lambdaj:2.2" level="project" />
   </component>
 </module>
