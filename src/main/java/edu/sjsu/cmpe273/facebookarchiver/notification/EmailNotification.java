@@ -29,8 +29,8 @@ import com.restfb.types.User;
 import com.restfb.FacebookClient;
 
 public class EmailNotification {
-    private String secretKey="";
-    private String accessKey="";
+    private static String secretKey="AKIAJ5BVG3SDMJRZ6ZSQ";
+    private static String accessKey="wcviO7XRG+13pSIB1op6hvNbIrE+zgOoCTahJzad";
 /*
     public static void main(String[] args) {
 
@@ -57,7 +57,7 @@ public class EmailNotification {
 	String email = me.getEmail();
 	String topic = "CMPE273Topic";
 
-	 AmazonSNSClient service = new AmazonSNSClient(new BasicAWSCredentials("secretKey", "accessKey"));
+	 AmazonSNSClient service = new AmazonSNSClient(new BasicAWSCredentials(secretKey, accessKey));
         //Need to fill in AWS credentials
 
 	 // Create a topic
@@ -66,6 +66,8 @@ public class EmailNotification {
 		        //.withName("MyTopic");
 		        CreateTopicResult createRes = service.createTopic(createReq);
 
+        //Print out TopicArn for future parameter usage.
+        System.out.println(createRes);
 		        // Subscribe to topic
 	 SubscribeRequest subscribeReq = new SubscribeRequest()
 		            .withTopicArn(createRes.getTopicArn())
@@ -74,7 +76,17 @@ public class EmailNotification {
 		            .withEndpoint(email);
 		        service.subscribe(subscribeReq);
 
-
+        //Publish a topic
+        System.out.println("1");
+        String topicArn = "arn:aws:sns:us-east-1:071202288544:CMPE273Topic";
+        String msg = "This is your facebook feed";
+        System.out.println("2");
+        PublishRequest publishRequest = new PublishRequest(topicArn, msg);
+        System.out.println("3");
+        PublishResult publishResult = service.publish(publishRequest);
+        System.out.println("4");
+        //print MessageId of message published to SNS topic
+        System.out.println("MessageId - " + publishResult.getMessageId());
 
     }
 }
