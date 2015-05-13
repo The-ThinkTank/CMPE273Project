@@ -120,8 +120,8 @@
       <file leaf-file-name="EmailNotification.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/edu/sjsu/cmpe273/facebookarchiver/notification/EmailNotification.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.59951454" vertical-offset="968" max-vertical-offset="1470">
-              <caret line="81" column="30" selection-start-line="81" selection-start-column="30" selection-end-line="81" selection-end-column="30" />
+            <state vertical-scroll-proportion="0.6723301" vertical-offset="218" max-vertical-offset="1470">
+              <caret line="33" column="2" selection-start-line="33" selection-start-column="2" selection-end-line="33" selection-end-column="2" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -1346,12 +1346,12 @@
       <workItem from="1430464718476" duration="3268000" />
       <workItem from="1431063720796" duration="14378000" />
       <workItem from="1431492394620" duration="1111000" />
-      <workItem from="1431493528422" duration="4634000" />
+      <workItem from="1431493528422" duration="4790000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="57841000" />
+    <option name="totallyTimeSpent" value="57997000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -2137,8 +2137,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/edu/sjsu/cmpe273/facebookarchiver/notification/EmailNotification.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.59951454" vertical-offset="968" max-vertical-offset="1470">
-          <caret line="81" column="30" selection-start-line="81" selection-start-column="30" selection-end-line="81" selection-end-column="30" />
+        <state vertical-scroll-proportion="0.6723301" vertical-offset="218" max-vertical-offset="1470">
+          <caret line="33" column="2" selection-start-line="33" selection-start-column="2" selection-end-line="33" selection-end-column="2" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>

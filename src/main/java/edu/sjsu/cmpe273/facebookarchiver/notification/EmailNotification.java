@@ -29,8 +29,8 @@ import com.restfb.types.User;
 import com.restfb.FacebookClient;
 
 public class EmailNotification {
-    private static String secretKey="AKIAJ5BVG3SDMJRZ6ZSQ";
-    private static String accessKey="wcviO7XRG+13pSIB1op6hvNbIrE+zgOoCTahJzad";
+    private static String secretKey="";
+    private static String accessKey="";
 /*
     public static void main(String[] args) {
 
