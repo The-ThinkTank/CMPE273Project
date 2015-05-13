@@ -5,6 +5,7 @@ import com.restfb.DefaultFacebookClient;
 import com.restfb.FacebookClient;
 import com.restfb.Version;
 import edu.sjsu.cmpe273.facebookarchiver.entity.UserPhotos;
+import edu.sjsu.cmpe273.facebookarchiver.notification.EmailNotification;
 import edu.sjsu.cmpe273.facebookarchiver.services.UserAccountService;
 import edu.sjsu.cmpe273.facebookarchiver.services.UserPhotoService;
 import org.scribe.builder.ServiceBuilder;
@@ -89,16 +90,14 @@ public class HomeController {
         this.facebookClient = new DefaultFacebookClient(accessToken.getToken(), Version.VERSION_2_2);
         userAccountService.create(facebookClient);
         userPhotoService.create(facebookClient);
-<<<<<<< Updated upstream
-        return "logged"; //successfully logged in.
-=======
+
 
 	//add message here
         EmailNotification EN = new EmailNotification();
         EN.sendSubscription(facebookClient);
 
-            return "logged"; //successfully logged in.
->>>>>>> Stashed changes
+        return "logged"; //successfully logged in.
+
     }
 
     private Token getAccessToken(String code) {
@@ -127,23 +126,21 @@ public class HomeController {
 
     @RequestMapping(value="/userAccounts/{id}/Top5Likes", method=RequestMethod.GET)
     @ResponseBody
-<<<<<<< Updated upstream
+
     public List<UserPhotos> getTopFive(@PathVariable("id")String id){
+//        ArrayList<UserPhotos> topFive = userPhotoService.getPhotos(id);
+//        ArrayList<String> topFivePhotoId = new ArrayList<String>();
+//
+//        for(int i = 0; i <= 4; i++){
+//            String picId = topFive.get(i).getId();
+//            topFivePhotoId.add(picId);
+//        }
+//
+//        EmailNotification EN = new EmailNotification();
+//        EN.sendMessage(topFivePhotoId);
+
         return userPhotoService.getTopPhotoByLikes(id);
-=======
-    public ArrayList<UserPhotos> getTopFive(@PathVariable("id")String id){
-        ArrayList<UserPhotos> topFive = userPhotoService.getPhotos(id);
-        ArrayList<String> topFivePhotoId = new ArrayList<String>();
 
-        for(int i = 0; i <= 4; i++){
-            String picId = topFive.get(i).getId();
-            topFivePhotoId.add(picId);
-        }
-
-        EmailNotification EN = new EmailNotification();
-        EN.sendMessage(topFivePhotoId);
-        return userPhotoService.getPhotos(id);
->>>>>>> Stashed changes
     }
 
     @RequestMapping(value="/userAccounts/{id}/Top5Comments", method = RequestMethod.GET)
