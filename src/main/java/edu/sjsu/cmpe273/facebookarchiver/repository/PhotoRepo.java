@@ -10,6 +10,6 @@ import java.util.ArrayList;
  */
 public interface PhotoRepo extends MongoRepository<UserPhotos, String> {
    // UserPhotos save(UserPhotos userPhotos);
-   UserPhotos findById(String Id);
+   UserPhotos findByPhotoId(String Id);
    ArrayList<UserPhotos> findByUserId(String Id);
 }

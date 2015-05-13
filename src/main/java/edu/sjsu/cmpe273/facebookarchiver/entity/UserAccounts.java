@@ -4,9 +4,9 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
 /**
- * Created by  on 4/25/15.
+ * Created by Rajat  on 4/25/15.
  */
-@Document(collection="UserAccounts")
+@Document(collection="userAccounts")
 public class UserAccounts {
     @Field
     private String id;

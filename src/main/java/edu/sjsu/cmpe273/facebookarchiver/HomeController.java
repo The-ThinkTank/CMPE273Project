@@ -5,7 +5,6 @@ import com.restfb.DefaultFacebookClient;
 import com.restfb.FacebookClient;
 import com.restfb.Version;
 import edu.sjsu.cmpe273.facebookarchiver.entity.UserPhotos;
-import edu.sjsu.cmpe273.facebookarchiver.notification.EmailNotification;
 import edu.sjsu.cmpe273.facebookarchiver.services.UserAccountService;
 import edu.sjsu.cmpe273.facebookarchiver.services.UserPhotoService;
 import org.scribe.builder.ServiceBuilder;
@@ -22,6 +21,7 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -89,14 +89,7 @@ public class HomeController {
         this.facebookClient = new DefaultFacebookClient(accessToken.getToken(), Version.VERSION_2_2);
         userAccountService.create(facebookClient);
         userPhotoService.create(facebookClient);
-
-
-
-	//add message here
-        EmailNotification EN = new EmailNotification();
-        EN.sendSubscription(facebookClient);
-
-            return "logged"; //successfully logged in.
+        return "logged"; //successfully logged in.
     }
 
     private Token getAccessToken(String code) {
@@ -107,7 +100,7 @@ public class HomeController {
     @RequestMapping(value="/userPhoto", method=RequestMethod.GET)
     @ResponseStatus(HttpStatus.OK)
     public @ResponseBody
-    void getPhoto(/*@PathVariable("user-id")String userId*/)
+    void getPhoto()
     {
        userPhotoService.create(facebookClient);
         return;
@@ -122,16 +115,34 @@ public class HomeController {
 
     @RequestMapping(value="/userAccounts/{id}/Top5Likes", method=RequestMethod.GET)
     @ResponseBody
-    public ArrayList<UserPhotos> getTopFive(@PathVariable("id")String id){
-        return userPhotoService.getPhotos(id);
+    public List<UserPhotos> getTopFive(@PathVariable("id")String id){
+        return userPhotoService.getTopPhotoByLikes(id);
     }
 
     @RequestMapping(value="/userAccounts/{id}/Top5Comments", method = RequestMethod.GET)
     @ResponseBody
     public List<UserPhotos> getFiveTopComments(@PathVariable("id")String id){
-        return userPhotoService.getComments(id);
+        return userPhotoService.getTopPhotoByComments(id);
     }
 
+    @RequestMapping(value="/userAccounts/{id}/userPhotos/", method=RequestMethod.PUT)
+    @ResponseBody
+    public List<UserPhotos> getPicsByYear(@PathVariable("id")String Id, @RequestParam(value="year",
+    required=true)int year) throws ParseException{
+        return userPhotoService.getPicsYear(Id, year);
+    }
+
+    @RequestMapping(value="/userAccounts/{id}/userPhotos/{userPhotoId}", method=RequestMethod.DELETE)
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public @ResponseBody String deleteId(@PathVariable(value="id")String Id, @PathVariable(value="userPhotoId")String photoId){
+        return userPhotoService.deletePhoto(Id, photoId);
+    }
+
+    @RequestMapping(value="/userAccounts/{id}/userPhotos/{userPhotoId}", method = RequestMethod.GET)
+    @ResponseStatus(HttpStatus.OK)
+    public @ResponseBody UserPhotos getAPhoto(@PathVariable("id")String Id, @PathVariable("userPhotoId")String userPhotoId){
+        return userPhotoService.findPhoto(Id, userPhotoId);
+    }
 
 
 }

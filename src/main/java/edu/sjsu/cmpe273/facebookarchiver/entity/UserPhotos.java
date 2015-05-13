@@ -13,7 +13,7 @@ public class UserPhotos {
 
 
     @Id
-    private String Id;
+    private String photoId;
 
     private String createdAt;
 
@@ -29,8 +29,8 @@ public class UserPhotos {
 
     }
 
-    public void setPhotoId(String Id){
-        this.Id=Id;
+    public void setPhotoId(String photoId){
+        this.photoId=photoId;
     }
     public void setCreatedAt(String createdAt){
         this.createdAt=createdAt;
@@ -61,8 +61,8 @@ public class UserPhotos {
     public String getUserId(){
         return userId;
     }
-    public String getId(){
-        return Id;
+    public String getPhotoId(){
+        return photoId;
     }
     public String getCreatedAt(){
         return createdAt;
