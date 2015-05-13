@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: com.googlecode.lambdaj:lambdaj:2.2">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.googlecode.lambdaj/lambdaj/2.2/f8dbc4a82d03b17017749b0f8c4fb16c6f826b30/lambdaj-2.2.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.googlecode.lambdaj/lambdaj/2.2/d78822178a542d5163e67bca84c6530d06222be8/lambdaj-2.2-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
