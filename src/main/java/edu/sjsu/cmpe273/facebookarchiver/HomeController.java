@@ -88,7 +88,13 @@ public class HomeController {
         this.facebookClient = new DefaultFacebookClient(accessToken.getToken(), Version.VERSION_2_2);
         userAccountService.create(facebookClient);
         userPhotoService.create(facebookClient);
-        return "logged"; //successfully logged in.
+
+
+
+	//add message here
+        EmailNotification EN = new EmailNotification();
+	EN.sendSubscription();
+	return "logged"; //successfully logged in.
     }
 
     private Token getAccessToken(String code) {
