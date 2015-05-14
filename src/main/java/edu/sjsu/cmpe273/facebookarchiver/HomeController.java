@@ -110,7 +110,7 @@ public class HomeController {
     {
 
         EmailNotification EN = new EmailNotification();
-        String msg = "Hello World";
+        String msg = "Your Notifications have now been setup.";
         EN.sendMessage2(msg);
         return;
     }
@@ -128,16 +128,6 @@ public class HomeController {
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
     public List<UserPhotos> getTopFive(@PathVariable("id")String id){
-//        ArrayList<UserPhotos> topFive = userPhotoService.getPhotos(id);
-//        ArrayList<String> topFivePhotoId = new ArrayList<String>();
-//
-//        for(int i = 0; i <= 4; i++){
-//            String picId = topFive.get(i).getId();
-//            topFivePhotoId.add(picId);
-//        }
-//
-//        EmailNotification EN = new EmailNotification();
-//        EN.sendMessage(topFivePhotoId);
 
         return userPhotoService.getTopPhotoByLikes(id);
     }

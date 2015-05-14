@@ -9,6 +9,7 @@ import com.restfb.types.Photo;
 import com.restfb.types.User;
 import edu.sjsu.cmpe273.facebookarchiver.entity.Comments;
 import edu.sjsu.cmpe273.facebookarchiver.entity.UserPhotos;
+import edu.sjsu.cmpe273.facebookarchiver.notification.EmailNotification;
 import edu.sjsu.cmpe273.facebookarchiver.repository.*;
 import edu.sjsu.cmpe273.facebookarchiver.results.DeletedPics;
 import edu.sjsu.cmpe273.facebookarchiver.results.Top5ByComments;
@@ -106,18 +107,27 @@ public class UserPhotoServiceImpl implements UserPhotoService {
     public List<UserPhotos> getTopPhotoByLikes(String id){
         List<UserPhotos> userPhotosArrayList = photoRepo.findByUserId(id);
         Top5ByLikes top5ByLikes = new Top5ByLikes();
+        String msg="";
 
         Collections.sort(userPhotosArrayList, UserPhotos.UserPhotosComparator);
         List<UserPhotos> userPhotoses = new ArrayList<UserPhotos>();
+
+        EmailNotification EN = new EmailNotification();
+        msg += "Your top 5 photo IDs are: ";
+
         int i=0;
         for(UserPhotos photos: userPhotosArrayList){
             userPhotoses.add(photos);
+            msg += photos.getPhotoId()+" ";
+
             i++;
             if(i==5)
             {
                 break;
             }
         }
+
+        EN.sendMessage2(msg);
         top5ByLikes.setUserPhotoses(userPhotoses);
         top5LikesRepo.save(top5ByLikes);
         return userPhotoses;
@@ -178,6 +188,11 @@ public class UserPhotoServiceImpl implements UserPhotoService {
             deletePics.setUserPhotoses(photoToDelete);
             deletedRepo.save(deletePics);
             photoRepo.delete(PhotoId);
+
+            EmailNotification EN = new EmailNotification();
+            String msg = "This photo with ID has been deleted: " + PhotoId;
+            EN.sendMessage2(msg);
+
             return "Photo is deleted";
         }
         else
@@ -192,12 +207,5 @@ public class UserPhotoServiceImpl implements UserPhotoService {
         }
         return null;
     }
-
-    //list all deleted pictures
-    /*@Override
-    public List<DeletedPics> getDeletedPics(String Id) {
-        List<DeletedPics> deletedList = deletedRepo.findByUserId(Id);
-        return deletedList;
-    }*/
 
 }
