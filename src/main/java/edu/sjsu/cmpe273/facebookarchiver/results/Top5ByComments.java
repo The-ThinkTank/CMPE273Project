@@ -1,13 +1,14 @@
 package edu.sjsu.cmpe273.facebookarchiver.results;
 
 import edu.sjsu.cmpe273.facebookarchiver.entity.UserPhotos;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.List;
 
 /**
  * Created by Rajat on 5/13/2015.
  */
-//@Document(collection="Top5ByComments")
+@Document(collection="Top5ByComments")
 public class Top5ByComments {
 
     private String id;

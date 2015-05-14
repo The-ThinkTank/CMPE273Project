@@ -9,10 +9,8 @@ import com.restfb.types.Photo;
 import com.restfb.types.User;
 import edu.sjsu.cmpe273.facebookarchiver.entity.Comments;
 import edu.sjsu.cmpe273.facebookarchiver.entity.UserPhotos;
-import edu.sjsu.cmpe273.facebookarchiver.repository.AccountRepo;
-import edu.sjsu.cmpe273.facebookarchiver.repository.PhotoRepo;
-import edu.sjsu.cmpe273.facebookarchiver.repository.Top5ByCommentsRepo;
-import edu.sjsu.cmpe273.facebookarchiver.repository.Top5LikesRepo;
+import edu.sjsu.cmpe273.facebookarchiver.repository.*;
+import edu.sjsu.cmpe273.facebookarchiver.results.DeletedPics;
 import edu.sjsu.cmpe273.facebookarchiver.results.Top5ByComments;
 import edu.sjsu.cmpe273.facebookarchiver.results.Top5ByLikes;
 import org.joda.time.DateTime;
@@ -44,6 +42,9 @@ public class UserPhotoServiceImpl implements UserPhotoService {
     @Autowired
     Top5LikesRepo top5LikesRepo;
 
+    @Autowired
+    DeletedPicsRepo deletedRepo;
+
     private String topic="CMPE273-Topic";
 
     @Override
@@ -56,42 +57,42 @@ public class UserPhotoServiceImpl implements UserPhotoService {
         int countOfLikes;//tracks number of likes.
 
         Connection<Photo> connection = facebookClient.fetchConnection("me/photos", Photo.class,
-               Parameter.with("fields", "id,created_time,source,comments,likes"),Parameter.with("limit",200));
-          userPhotos.setUserId(me.getId());
+                Parameter.with("fields", "id,created_time,source,comments,likes"),Parameter.with("limit",200));
+        userPhotos.setUserId(me.getId());
         for(Photo photos: connection.getData()) {
-                List<String> tempLikes = new ArrayList<String>();
-                List<Comments> commentList = new ArrayList<Comments>();
-                userPhotos.setPhotoId(photos.getId());
-                createdAt = dateFormat.format(photos.getCreatedTime());
-                userPhotos.setCreatedAt(createdAt);
-                userPhotos.setSource(photos.getSource());
-                List<NamedFacebookType> likes = photos.getLikes();
-                countOfLikes = 0;  //making sure likes dont keep increasing for each photo
-                for (NamedFacebookType like : likes) {
-                    String name = like.getName();
-                    tempLikes.add(name);
-                    ++countOfLikes;
-                }
-                userPhotos.setLikes(tempLikes);
-                userPhotos.setNumberOfLikes(countOfLikes); //stores number of likes.
-
-              //comments code
-                List<Comment> comment = photos.getComments();
-            int j=0;
-                for (Comment notes : comment) {
-                    Comments getcomments = new Comments();
-                    getcomments.setId(notes.getId());
-                    getcomments.setName(notes.getFrom().getName());
-                    getcomments.setMessage(notes.getMessage());
-                    getcomments.setLike_count(notes.getLikeCount());
-                    userPhotos.setNumberOfComments(comment.size());
-                    commentList.add(getcomments);
-                    j++;
-                }
-
-                userPhotos.setComments(commentList);
-                photoRepo.save(userPhotos);
+            List<String> tempLikes = new ArrayList<String>();
+            List<Comments> commentList = new ArrayList<Comments>();
+            userPhotos.setPhotoId(photos.getId());
+            createdAt = dateFormat.format(photos.getCreatedTime());
+            userPhotos.setCreatedAt(createdAt);
+            userPhotos.setSource(photos.getSource());
+            List<NamedFacebookType> likes = photos.getLikes();
+            countOfLikes = 0;  //making sure likes dont keep increasing for each photo
+            for (NamedFacebookType like : likes) {
+                String name = like.getName();
+                tempLikes.add(name);
+                ++countOfLikes;
             }
+            userPhotos.setLikes(tempLikes);
+            userPhotos.setNumberOfLikes(countOfLikes); //stores number of likes.
+
+            //comments code
+            List<Comment> comment = photos.getComments();
+            int j=0;
+            for (Comment notes : comment) {
+                Comments getcomments = new Comments();
+                getcomments.setId(notes.getId());
+                getcomments.setName(notes.getFrom().getName());
+                getcomments.setMessage(notes.getMessage());
+                getcomments.setLike_count(notes.getLikeCount());
+                userPhotos.setNumberOfComments(comment.size());
+                commentList.add(getcomments);
+                j++;
+            }
+
+            userPhotos.setComments(commentList);
+            photoRepo.save(userPhotos);
+        }
 
         return userPhotos;
     }
@@ -150,10 +151,8 @@ public class UserPhotoServiceImpl implements UserPhotoService {
     public List<UserPhotos> getPicsYear(String Id, int years) throws ParseException {
         ArrayList<UserPhotos> photosList = photoRepo.findByUserId(Id);
         List<UserPhotos> newList = new ArrayList<UserPhotos>();
-       DateTimeFormatter year = DateTimeFormat.forPattern("yyyy");
-        //DateTime date = new DateTime();
+        DateTimeFormatter year = DateTimeFormat.forPattern("yyyy");
         DateTime dateTime = new DateTime();
-        //int a = new DateTime().getYear()-years;
         System.out.println(new DateTime().getYear()-years);
         DateTime subtracted = dateTime.minusYears(new DateTime().getYear()-years);
         String date;
@@ -171,7 +170,13 @@ public class UserPhotoServiceImpl implements UserPhotoService {
     }
     @Override
     public String deletePhoto(String id, String PhotoId){
+        List<UserPhotos> photoToDelete=new ArrayList<UserPhotos>();
+        DeletedPics deletePics=new DeletedPics();
         if(accountRepo.exists(id)){
+            UserPhotos deletePic=photoRepo.findByPhotoId(PhotoId);
+            photoToDelete.add(deletePic);
+            deletePics.setUserPhotoses(photoToDelete);
+            deletedRepo.save(deletePics);
             photoRepo.delete(PhotoId);
             return "Photo is deleted";
         }
@@ -187,5 +192,12 @@ public class UserPhotoServiceImpl implements UserPhotoService {
         }
         return null;
     }
+
+    //list all deleted pictures
+    /*@Override
+    public List<DeletedPics> getDeletedPics(String Id) {
+        List<DeletedPics> deletedList = deletedRepo.findByUserId(Id);
+        return deletedList;
+    }*/
 
 }

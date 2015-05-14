@@ -8,5 +8,4 @@ import org.springframework.data.mongodb.repository.MongoRepository;
  */
 public interface Top5LikesRepo extends MongoRepository<Top5ByLikes, String>{
 
-
 }

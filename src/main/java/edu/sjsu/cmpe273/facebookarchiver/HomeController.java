@@ -49,7 +49,7 @@ public class HomeController {
 
 
     public HomeController() {
-         this.oAuthService = buildOAuthService(client_id, app_secret);
+        this.oAuthService = buildOAuthService(client_id, app_secret);
     }
     //starts the oauth by passing necessary parameters and initializes oauthservice.
     private OAuthService buildOAuthService(String client_id, String app_secret){
@@ -62,10 +62,10 @@ public class HomeController {
                 .scope("user_photos")
                 .build();
     }
-      @RequestMapping(value="/")
-      public String HomePage() {
-       return "login";
-      }
+    @RequestMapping(value="/")
+    public String HomePage() {
+        return "login";
+    }
 
     //link redirects to facebook for access token.
     @RequestMapping(value="/auth/facebook", method=RequestMethod.GET)
@@ -91,13 +91,10 @@ public class HomeController {
         userAccountService.create(facebookClient);
         userPhotoService.create(facebookClient);
 
-
-	//add message here
         EmailNotification EN = new EmailNotification();
         EN.sendSubscription(facebookClient);
 
         return "logged"; //successfully logged in.
-
     }
 
     private Token getAccessToken(String code) {
@@ -105,12 +102,13 @@ public class HomeController {
         return oAuthService.getAccessToken(Token.empty(), verify);//Token.Empty() method in scribe and handles OAuthservice for both OAuth1 and 2.
     }
 
-    @RequestMapping(value="/userPhoto", method=RequestMethod.GET)
+    //Sends out Notification
+    @RequestMapping(value="/notification", method=RequestMethod.GET)
     @ResponseStatus(HttpStatus.OK)
     public @ResponseBody
-    void getPhoto()
+    void notification()
     {
-       userPhotoService.create(facebookClient);
+
         EmailNotification EN = new EmailNotification();
         String msg = "Hello World";
         EN.sendMessage2(msg);
@@ -120,13 +118,15 @@ public class HomeController {
     //List all photos
     @RequestMapping(value="/userAccounts/{id}/userPhotos", method=RequestMethod.GET)
     @ResponseBody
+    @ResponseStatus(HttpStatus.OK)
     public ArrayList<UserPhotos> getAllPhotos(@PathVariable("id")String Id){
         return userPhotoService.listAllPhotos(Id);
     }
 
+    //List 5 top photos based on number of likes
     @RequestMapping(value="/userAccounts/{id}/Top5Likes", method=RequestMethod.GET)
     @ResponseBody
-
+    @ResponseStatus(HttpStatus.OK)
     public List<UserPhotos> getTopFive(@PathVariable("id")String id){
 //        ArrayList<UserPhotos> topFive = userPhotoService.getPhotos(id);
 //        ArrayList<String> topFivePhotoId = new ArrayList<String>();
@@ -140,28 +140,32 @@ public class HomeController {
 //        EN.sendMessage(topFivePhotoId);
 
         return userPhotoService.getTopPhotoByLikes(id);
-
     }
 
+    //List 5 top photos based on number of photos
     @RequestMapping(value="/userAccounts/{id}/Top5Comments", method = RequestMethod.GET)
     @ResponseBody
+    @ResponseStatus(HttpStatus.OK)
     public List<UserPhotos> getFiveTopComments(@PathVariable("id")String id){
         return userPhotoService.getTopPhotoByComments(id);
     }
 
+    //returns photos based on the year  it was created
     @RequestMapping(value="/userAccounts/{id}/userPhotos/", method=RequestMethod.PUT)
     @ResponseBody
     public List<UserPhotos> getPicsByYear(@PathVariable("id")String Id, @RequestParam(value="year",
-    required=true)int year) throws ParseException{
+            required=true)int year) throws ParseException{
         return userPhotoService.getPicsYear(Id, year);
     }
 
+    //Deletes the photo based on photoId
     @RequestMapping(value="/userAccounts/{id}/userPhotos/{userPhotoId}", method=RequestMethod.DELETE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public @ResponseBody String deleteId(@PathVariable(value="id")String Id, @PathVariable(value="userPhotoId")String photoId){
         return userPhotoService.deletePhoto(Id, photoId);
     }
 
+    //returns a particular photo
     @RequestMapping(value="/userAccounts/{id}/userPhotos/{userPhotoId}", method = RequestMethod.GET)
     @ResponseStatus(HttpStatus.OK)
     public @ResponseBody UserPhotos getAPhoto(@PathVariable("id")String Id, @PathVariable("userPhotoId")String userPhotoId){
