@@ -13,6 +13,6 @@ Model
 View
 - logged.html
 - login.html
-- 
+
 Controller
 - HomeController.java
