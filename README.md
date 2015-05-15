@@ -26,6 +26,11 @@ View
 Controller
 - HomeController.java
 
+Run Server
+- $ gradle clean
+- $ gradle build
+- $ gradle bootRun
+
 Testing Considerations
 - Use Postman/Advanced Rest Client to test Rest Request/Response.
 - Ex: Test "GetTop5Likes" in Postman.
