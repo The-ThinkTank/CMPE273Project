@@ -26,6 +26,9 @@ View
 Controller
 - HomeController.java
 
+Service
+- EmailNotification.java  //Removed to protect AWS keys.
+
 Run Server
 - $ gradle clean
 - $ gradle build
